@@ -3,7 +3,7 @@ package com.cybersoft.osahaneat.Entity;
 import jakarta.persistence.*;
 import org.apache.catalina.User;
 
-@Entity(name = "RatingRestaurant")
+@Entity(name = "rating_restaurant")
 public class RatingRestaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

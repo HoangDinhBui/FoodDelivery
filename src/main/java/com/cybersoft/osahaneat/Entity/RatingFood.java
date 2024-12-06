@@ -2,7 +2,7 @@ package com.cybersoft.osahaneat.Entity;
 
 import jakarta.persistence.*;
 
-@Entity(name = "RatingFood")
+@Entity(name = "rating_food")
 public class RatingFood {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
