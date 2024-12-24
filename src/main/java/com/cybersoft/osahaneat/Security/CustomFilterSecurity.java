@@ -9,17 +9,22 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class CustomFilterSecurity {
     @Autowired
     CustomUserDetailService customUserDetailService;
+
+    @Autowired
+    CustomJwtFilter customJwtFilter;
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
@@ -31,15 +36,16 @@ public class CustomFilterSecurity {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // Configure CSRF and CORS using the new lambda-based APIs
         http.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable());
+                .cors(cors -> cors.disable())
+                .sessionManagement(session
+                        -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/login/**").permitAll()
+                        .anyRequest().authenticated()
+                );
 
-        // Define authorization rules
-        http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/login/**").permitAll()
-                .anyRequest().authenticated()
-        ).httpBasic(Customizer.withDefaults());
+        http.addFilterBefore(customJwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
