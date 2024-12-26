@@ -10,5 +10,10 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+  servlet:
+    multipart:
+      max-file-size: 10MB
 jwt:
   privateKey: at+yz2k/BRpv8SFaHyqK3hPn4Cw/mpcWBTY+efGWMpo=
+fileUpload:
+  rootPath: D:\Self-lerning\CyberSoft\Uploads
