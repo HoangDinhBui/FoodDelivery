@@ -38,6 +38,15 @@ public class RestaurantController {
         return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
+    @GetMapping
+    public ResponseEntity<?> getHomeRestarant() {
+        ResponseData responseData = new ResponseData();
+
+        responseData.setData(restaurantServiceImp.getHomePageRestaurant());
+
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
+    }
+
     @GetMapping("/file/{filename:.+}")
     public ResponseEntity<?> getFileRestarant(@PathVariable String filename) {
         Resource resource = fileServiceImp.loadFile(filename);
